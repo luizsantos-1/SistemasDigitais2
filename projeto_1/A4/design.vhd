@@ -20,10 +20,23 @@ architecture ram_arch of ram is
     constant MEM_DEPTH : integer := 2**addressSize;
 	type mem_type is array (0 to MEM_DEPTH - 1) of bit_vector(wordSize - 1 downto 0);
     
+	component regFile is 
+      generic (
+          regSize: natural: = 8;
+          addressSize : natural := 5 
+      );
+      port(
+          endereco: in bit_vector(addressSize - 1 downto 0);
+          reset, clock, write: in bit;
+          D: in bit_vector (regSize - 1 downto 0);
+          Q: out bit_vector(regSIze- 1 downto 0);
+	end component;
     
 begin 
-
-    data <= memoria(to_integer(unsigned(addr))); 
+	banco: regFile generic map (wordSize, addressSize)
+    			   port map (addr, '0', ck, wr, data_i, data_o);
+                   
+             
     		
 end rom_arquivo_arch;
 
@@ -33,26 +46,31 @@ entity regFile is
         addressSize : natural := 5 
     );
     port(
-        reset, clock, EN: in bit;
+    	endereco: in bit_vector(addressSize - 1 downto 0);
+        reset, clock, write: in bit;
         D: in bit_vector (regSize - 1 downto 0);
         Q: out bit_vector(regSIze- 1 downto 0);
 end regFile;
 
 architecture behavior of regFile is
 
-type mem_type is array (0 to 2**addressSize - 1) of bit_vector(wordSize - 1 downto 0);
+type mem_type is array (0 to 2**addressSize - 1) of bit_vector(regSize - 1 downto 0);
 signal mem: mem_type;
 
+--ESCRITA
 begin
   process (reset, clock) 
   	begin
       if reset='0' 
-      	then Q <= '0';
-      elsif clock'EVENT and clock='1' and EN='1' 
-      	then Q <= D;
+      	then mem(to_integer(unsigned(endereco))) <= D;
+      elsif clock'EVENT and clock='1' and write='1' 
+      	then mem(to_integer(unsigned(endereco))) <= D;
       end if;
   end process;
   
-Q <= mem
+-- LEITURA
+Q <= mem(to_integer(unsigned(endereco))); 
   
 end behavior;
+
+
