@@ -51,6 +51,9 @@ begin
     data_in <= "01010101";
     wr <= '1';
     wait for 2 ns;
+    wr <= '0';
+    data_in <= "00000000";
+    wait for 2 ns;
     
     assert(data_out ="01010101") report "Fail 0+0" severity error;
     
@@ -61,4 +64,3 @@ begin
  
   end process;
 end tb;
-
