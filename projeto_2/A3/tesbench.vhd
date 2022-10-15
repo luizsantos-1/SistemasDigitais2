@@ -50,15 +50,20 @@ begin
   	instruction_in <= "0000001111100000";-- soma zero com zero e poe no primeiro registrador
     wait for 2 ns;
     instruction_in <= "1111110000000000"; -- soma o primeiro registrador com zero e poe o conteudo no primeiro e na saida
-    wait for 1 ns;
-    assert (q_out = "0000000000000000") report "Fail 0+0" severity error;
+    wait for 2 ns;
+    assert (q_out = "0000000000000000") report "Fail teste 1" severity error;
     
   	instruction_in <= "0000001111100001";-- soma zero com zero e poe no segundo registrador
     wait for 2 ns;
     instruction_in <= "1111110000100000"; -- soma o segundo registrador com zero e poe o conteudo no segundo e na saida
-    wait for 1 ns;
-    assert (q_out = "0000000000000000") report "Fail 0+0" severity error;
+    wait for 2 ns;
+    assert (q_out = "0000000000000000") report "Fail teste 2" severity error;
     
+    instruction_in <= "0011110000000000";
+    
+    wait for 2 ns;
+    
+    assert (q_out = "0000000000001111") report "Fail teste 3" severity error;
     
  
     

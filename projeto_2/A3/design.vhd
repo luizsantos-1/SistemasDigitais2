@@ -93,6 +93,7 @@ begin
     q2 <= "0000000000000000" when (to_integer(unsigned(rr2)) = regn - 1) else
             out_vector(to_integer(unsigned(rr2)));
     in_vector(to_integer(unsigned(wr))) <= d;
+    
     load_vector(to_integer(unsigned(wr))) <= regWrite;
     
 
@@ -200,12 +201,13 @@ banco: regfile generic map (32, 16) port map (clock, reset, regWrite_in, instruc
 somador: somador_16 port map(in2_soma, in1_soma, out_soma,overflow);
 
 in2_soma <= out2_reg when (instruction(15) = '1') else 
-			instruction(14 downto 10) & "00000000000" when (instruction(14) = '0') else
-            instruction(14 downto 10) & "11111111111" when (instruction(14) = '1');
+			"00000000000" & instruction(14 downto 10)  when (instruction(14) = '0') else
+            "11111111111" & instruction(14 downto 10) when (instruction(14) = '1');
             
 in1_soma <= out1_reg; 
 q1 <= out1_reg;
 
+regWrite_in <= '1';--um problema esta aqui
 
 end calc_arch;
 
