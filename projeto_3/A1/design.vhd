@@ -1,0 +1,55 @@
+-- Code your design here
+library IEEE;
+use IEEE.numeric_bit.all;
+
+entity fulladder is
+  port (
+    a, b, cin: in bit;
+    s, cout: out bit
+  );
+ end entity;
+
+architecture structural of fulladder is
+  signal axorb: bit;
+begin
+  axorb <= a xor b;
+  s <= axorb xor cin;
+  cout <= (axorb and cin) or (a and b);
+ end architecture;
+ 
+entity alu1bit is 
+	port (
+    		a,b,less,cin: in bit;
+            result, cout, set, overflow: out bit;
+            ainvert, binvert: in bit;
+            operation: bit_vector(1 downto 0)
+            );
+end entity;
+
+architecture alu1bit_arch of alu1bit is
+	component fulladder is
+      port (
+        a, b, cin: in bit;
+        s, cout: out bit
+      );
+ end component;
+  signal s_soma, s_and, s_or, s_slt, a_processado, b_processado, carry_out : bit;
+  
+begin
+    a_processado <= a xor ainvert;
+    b_processado <= b xor binvert;
+
+	s_and <= a_processado and b_processado;
+    s_or <= a_processado or b_processado;
+
+	somador: fulladder port map (a_processado, b_processado,cin,s_soma, carry_out);
+  set <= s_soma;
+  cout <= carry_out;
+  overflow <=carry_out;
+
+  result <= s_soma when ( operation = "10") else
+            s_or when ( operation = "01") else
+    		    s_and when (operation = "00") else
+            less when (operation = "11");
+
+ end architecture;
