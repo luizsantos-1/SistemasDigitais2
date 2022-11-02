@@ -87,16 +87,16 @@ signal inv_detec: bit;
 signal op: bit_vector(1 downto 0);
 
 begin
-inv_detec <= S(0) or S(1);
-op <= S(2) & S(3);
+inv_detec <= S(3) or S(2);
+op <= S(1) & S(0);
 
-alu1bit0: alu1bit port map (A(0), B(0), set_vec(size - 1),inv_detec, F(0), carry(0), set_vec(0), overflow_ignore(0), S(0), S(1), op);
+alu1bit0: alu1bit port map (A(0), B(0), set_vec(size - 1),inv_detec, F(0), carry(0), set_vec(0), overflow_ignore(0), S(3), S(2), op);
 
 g1: for i in 1 to size - 2 generate 
-    	alu1biti: alu1bit  port map (A(i), B(i), '0',carry(i-1), F(i), carry(i), set_vec(i), overflow_ignore(i), S(0), S(1), op);
+    	alu1biti: alu1bit  port map (A(i), B(i), '0',carry(i-1), F(i), carry(i), set_vec(i), overflow_ignore(i), S(3), S(2), op);
 end generate g1;
 
-alu1bitfinal: alu1bit port map (A(size -1), B(size -1), '0',carry(size - 2), F(size -1), Co, set_vec(size - 1), Ov, S(0), S(1), op);
+alu1bitfinal: alu1bit port map (A(size -1), B(size -1), '0',carry(size - 2), F(size -1), Co, set_vec(size - 1), Ov, S(3), S(2), op);
 
 compare <= (others => '0');
 
@@ -104,5 +104,3 @@ Z <= '1' when (set_vec = compare) else
 	 '0';
 
 end architecture;
-
-
