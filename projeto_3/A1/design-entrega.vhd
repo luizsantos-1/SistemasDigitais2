@@ -30,11 +30,12 @@ begin
 	somador: fulladder port map (a_processado, b_processado,cin,s_soma, carry_out);
   set <= s_soma;
   cout <= carry_out;
-  overflow <=carry_out;
+  overflow <= (a_processado and b_processado and (not s_soma)) or ((not a_processado) and (not b_processado) and s_soma);
 
   result <= s_soma when ( operation = "10") else
             s_or when ( operation = "01") else
-    		    s_and when (operation = "00") else
+    		s_and when (operation = "00") else
             less when (operation = "11");
 
  end architecture;
+ 
