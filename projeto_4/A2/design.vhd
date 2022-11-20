@@ -1,6 +1,21 @@
 library IEEE;
 use IEEE.numeric_bit.all;
 
+entity fulladder is
+  port (
+    a, b, cin: in bit;
+    s, cout: out bit
+  );
+ end entity;
+
+architecture structural of fulladder is
+  signal axorb: bit;
+begin
+  axorb <= a xor b;
+  s <= axorb xor cin;
+  cout <= (axorb and cin) or (a and b);
+ end architecture;
+
 entity alu1bit is 
 	port (
     		a,b,less,cin: in bit;
@@ -39,7 +54,7 @@ begin
  end architecture;
  
  entity alu is generic (
- 		size: natural := 10 --Bit size
+ 		size: natural := 64 --Bit size
 );
 port (
 A,B: in bit_vector(size -1 downto 0); --inputs
