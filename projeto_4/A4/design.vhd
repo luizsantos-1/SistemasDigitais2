@@ -1,4 +1,4 @@
-llibrary IEEE;
+library IEEE;
 use IEEE.numeric_bit.all;
 
 entity controlunit is 
@@ -23,10 +23,10 @@ architecture controlunit_arch of controlunit is
 	signal ldur: bit;
     signal type_r: bit;
 begin
-	type_r <= '1' (opcode = "10001011000") else
-    		  '1' (opcode = "11001011000") else
-              '1' (opcode = "10001010000") else
-              '1' (opcode = "10101010000") else
+	type_r <= '1' when (opcode = "10001011000") else
+    		  '1' when (opcode = "11001011000") else
+              '1' when (opcode = "10001010000") else
+              '1' when (opcode = "10101010000") else
               '0';
     			
 
@@ -61,7 +61,7 @@ begin
     			"00" when (opcode = "11111000000") else 
                 "11" when (opcode = "00010110100") else
                 "00" when (opcode = "00000000101") else
-                "10 "when (type_r = '1');
+                "10"when (type_r = '1');
     memWrite <=  '0' when (opcode = "11111000010") else
     			'1' when (opcode = "11111000000") else 
                 '0' when (opcode = "00010110100") else
