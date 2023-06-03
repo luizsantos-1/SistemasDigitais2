@@ -73,7 +73,7 @@ architecture regfile_arch of regfile is
       );
 end component;
 
-type in_out is array (0 to regn - 1) of bit_vector(wordSize - 1 downto 0);
+type in_out is array (0 to regn - 2) of bit_vector(wordSize - 1 downto 0);
 
 signal load_vector: bit_vector(regn - 1 downto 0);
 
@@ -83,13 +83,15 @@ signal out_vector: in_out;
 
 begin 
 
-	g1: for i in 0 to regn - 1 generate 
+	g1: for i in 0 to regn - 2 generate 
     	regi: reg generic map (wordSize) port map (clock, reset, load_vector(i), in_vector(i), out_vector(i));
     end generate g1;
     
       			
-	q1 <= out_vector(to_integer(unsigned(rr1)));
-    q2 <= out_vector(to_integer(unsigned(rr2)));
+	q1 <= "0000000000000000" when (to_integer(unsigned(rr1)) = regn - 1) else 
+           out_vector(to_integer(unsigned(rr1)));
+    q2 <= "0000000000000000" when (to_integer(unsigned(rr2)) = regn - 1) else
+            out_vector(to_integer(unsigned(rr2)));
     in_vector(to_integer(unsigned(wr))) <= d;
     load_vector(to_integer(unsigned(wr))) <= regWrite; 
   
